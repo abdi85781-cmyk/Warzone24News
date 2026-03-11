@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="so" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warzone24News - Wararka Ugu Dambeeya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        somali: ['"Noto Sans Arabic"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#dc2626',
+                        secondary: '#1e40af',
+                        dark: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; }
+        .news-card { transition: all 0.3s ease; }
+        .news-card:hover { transform: translateY(-5px); }
+        .hero-slider { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background-color: #dc2626;
+            color: white;
+            white-space: nowrap;
+        }
+        .ticker {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .category-badge {
+            position: relative;
+            overflow: hidden;
+        }
+        .category-badge::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #dc2626;
+            transition: width 0.3s;
+        }
+        .category-badge:hover::after { width: 100%; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300 font-somali">
+
+    <!-- Breaking News Ticker -->
+    <div class="ticker-wrap py-2">
+        <div class="ticker text-sm font-semibold">
+            🔴 WARBIXIN DEG DEG AH: Golaha Wakiilada oo ansixiyay miisaaniyadda dowladda 2025 | Kooxda Barcelona oo guulaystay La Liga | Roobabka xagaaga ee Soomaaliya oo la saadaaliyay inay yaraadaan | Tiknoolajiyada AI oo si weyn ugu dhex muuqata London |
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300">
+        <div class="container mx-auto px-4">
+            <!-- Top Bar -->
+            <div class="flex justify-between items-center py-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" aria-label="Beddel Habka Madow/Iffaaq">
+                        <i class="fas fa-moon dark:hidden text-xl"></i>
+                        <i class="fas fa-sun hidden dark:block text-xl text-yellow-400"></i>
+                    </button>
+                    <div class="hidden md:flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <i class="far fa-calendar-alt ml-2"></i>
+                        <span id="current-date"></span>
+                    </div>
+                </div>
+                
+                <!-- Logo -->
+                <div class="flex-1 text-center">
+                    <a href="#" class="inline-block">
+                        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
+                            <span class="text-primary">WARZONE</span><span class="text-secondary">24</span><span class="text-gray-800 dark:text-white">NEWS</span>
+                        </h1>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Wararka Ugu Dambeeya Caalamka</p>
+                    </a>
+                </div>
+
+                <!-- Search & Social -->
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="relative hidden md:block">
+                        <input type="text" id="searchInput" placeholder="Raadi warar..." class="pl-10 pr-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:border-primary w-48 transition-all">
+                        <button onclick="performSearch()" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="flex space-x-3 space-x-reverse">
+                        <a href="#" class="text-blue-600 hover:text-blue-700 text-xl"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-sky-500 hover:text-sky-600 text-xl"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-red-600 hover:text-red-700 text-xl"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="text-pink-600 hover:text-pink-700 text-xl"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="py-3 overflow-x-auto">
+                <ul class="flex space-x-6 space-x-reverse min-w-max text-sm font-semibold">
+                    <li><a href="#home" class="text-primary border-b-2 border-primary pb-1">Bogga Hore</a></li>
+                    <li><a href="#caalamka" class="hover:text-primary transition category-badge pb-1">Wararka Caalamka</a></li>
+                    <li><a href="#afrika" class="hover:text-primary transition category-badge pb-1">Afrika</a></li>
+                    <li><a href="#soomaaliya" class="hover:text-primary transition category-badge pb-1">Soomaaliya</a></li>
+                    <li><a href="#ciyaaraha" class="hover:text-primary transition category-badge pb-1">Ciyaaraha</a></li>
+                    <li><a href="#caafimaad" class="hover:text-primary transition category-badge pb-1">Caafimaadka</a></li>
+                    <li><a href="#saynis" class="hover:text-primary transition category-badge pb-1">Saynis & Teknoloji</a></li>
+                    <li><a href="#cimilada" class="hover:text-primary transition category-badge pb-1">Cimilada</a></li>
+                    <li><a href="#contact" class="hover:text-primary transition category-badge pb-1">Nala Soo Xiriir</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Search (Visible only on mobile) -->
+    <div class="md:hidden bg-white dark:bg-gray-800 p-4 border-b dark:border-gray-700">
+        <div class="relative">
+            <input type="text" id="mobileSearchInput" placeholder="Raadi warar..." class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:border-primary">
+            <button onclick="performMobileSearch()" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section / Featured News Slider -->
+    <section id="home" class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Main Slider -->
+            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden shadow-2xl h-[400px] md:h-[500px] group">
+                <div id="heroSlider" class="relative h-full">
+                    <!-- Slide 1 -->
+                    <div class="hero-slide absolute inset-0 transition-opacity duration-500 opacity-100" data-index="0">
+                        <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1200&h=800&fit=crop" alt="Wararka Caalamka" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6 md:p-8 text-white">
+                            <span class="bg-primary px-3 py-1 rounded-full text-xs font-bold mb-3 inline-block">WARARKA CAALAMKA</span>
+                            <h2 class="text-2xl md:text-4xl font-bold mb-3 leading-tight">Shirka COP29: Wadamada Caalamka oo heshiis cusub ku gaaray isbeddelka cimilada</h2>
+                            <p class="text-gray-200 mb-4 line-clamp-2">Wadamada ugu waaweyn biyaha-qaadka greenhouse gases ayaa ku heshiiyay inay kordhiyaan taageerada maaliyadeed ee dalalka soo koraya...</p>
+                            <div class="flex items-center text-sm text-gray-300">
+                                <span><i class="far fa-clock ml-2"></i> 3 saacadood kahor</span>
+                                <span class="mx-3">|</span>
+                                <span><i class="far fa-user ml-2"></i> Maxamed Cabdi</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="hero-slide absolute inset-0 transition-opacity duration-500 opacity-0" data-index="1">
+                        <img src="https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?w=1200&h=800&fit=crop" alt="Wararka Afrika" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6 md:p-8 text-white">
+                            <span class="bg-green-600 px-3 py-1 rounded-full text-xs font-bold mb-3 inline-block">WARARKA AFRIKA</span>
+                            <h2 class="text-2xl md:text-4xl font-bold mb-3 leading-tight">Xarunta Ganacsiga Afrika oo sii kobcaysa isbitaallada caafimaadka</h2>
+                            <p class="text-gray-200 mb-4 line-clamp-2">Dowladda Kenya ayaa ku dhawaaqday mashaariic cusub oo lagu dhisayo isbitaallo casri ah oo loogu talagalay daaweynta caafimaadka...</p>
+                            <div class="flex items-center text-sm text-gray-300">
+                                <span><i class="far fa-clock ml-2"></i> 5 saacadood kahor</span>
+                                <span class="mx-3">|</span>
+                                <span><i class="far fa-user ml-2"></i> Faadumo Xasan</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="hero-slide absolute inset-0 transition-opacity duration-500 opacity-0" data-index="2">
+                        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&h=800&fit=crop" alt="Ciyaaraha" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6 md:p-8 text-white">
+                            <span class="bg-blue-600 px-3 py-1 rounded-full text-xs font-bold mb-3 inline-block">CIYAARAHA</span>
+                            <h2 class="text-2xl md:text-4xl font-bold mb-3 leading-tight">Kooxda Real Madrid oo ku guuleysatay koobka Champions League</h2>
+                            <p class="text-gray-200 mb-4 line-clamp-2">Ciyaartoyda Real Madrid ayaa ku dhawaaqday guul weyn kadib markay ka adkaadeen kooxda Manchester United...</p>
+                            <div class="flex items-center text-sm text-gray-300">
+                                <span><i class="far fa-clock ml-2"></i> 2 saacadood kahor</span>
+                                <span class="mx-3">|</span>
+                                <span><i class="far fa-user ml-2"></i> Axmed Nuur</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slider Controls -->
+                <button onclick="changeSlide(-1)" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-sm p-3 rounded-full text-white transition opacity-0 group-hover:opacity-100">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button onclick="changeSlide(1)" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-sm p-3 rounded-full text-white transition opacity-0 group-hover:opacity-100">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <!-- Dots -->
+                <div class="absolute bottom-4 right-4 flex space-x-2 space-x-reverse">
+                    <button onclick="goToSlide(0)" class="w-3 h-3 rounded-full bg-white slider-dot opacity-100"></button>
+                    <button onclick="goToSlide(1)" class="w-3 h-3 rounded-full bg-white/50 slider-dot"></button>
+                    <button onclick="goToSlide(2)" class="w-3 h-3 rounded-full bg-white/50 slider-dot"></button>
+                </div>
+            </div>
+
+            <!-- Side Featured -->
+            <div class="lg:col-span-1 space-y-4">
+                <div class="relative rounded-xl overflow-hidden h-[156px] group cursor-pointer news-card">
+                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop" alt="Caafimaad" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 text-white">
+                        <span class="bg-teal-600 px-2 py-0.5 rounded text-xs font-bold">CAAFIMAAD</span>
+                        <h3 class="font-bold mt-1 line-clamp-2">Cilmi baaris cusub oo ku saabsan caafimaadka wadnaha</h3>
+                    </div>
+                </div>
+                <div class="relative rounded-xl overflow-hidden h-[156px] group cursor-pointer news-card">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop" alt="Teknoloji" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 text-white">
+                        <span class="bg-purple-600 px-2 py-0.5 rounded text-xs font-bold">SAYNIS</span>
+                        <h3 class="font-bold mt-1 line-clamp-2">AI cusub oo si buuxda u beddelaya caafimaadka</h3>
+                    </div>
+                </div>
+                <div class="relative rounded-xl overflow-hidden h-[156px] group cursor-pointer news-card">
+                    <img src="https://images.unsplash.com/photo-1592210454359-9043f067919b?w=600&h=400&fit=crop" alt="Cimilada" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 text-white">
+                        <span class="bg-orange-500 px-2 py-0.5 rounded text-xs font-bold">CIMILADA</span>
+                        <h3 class="font-bold mt-1 line-clamp-2">Saadaasha cimilada ee toddobaadkan</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="container mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Left Content (News Categories) -->
+        <div class="lg:col-span-3 space-y-12">
+            
+            <!-- Wararka Caalamka -->
+            <section id="caalamka" class="scroll-mt-24">
+                <div class="flex justify-between items-center mb-6 border-b-2 border-red-600 pb-2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-globe-africa ml-2 text-red-600"></i>
+                        Wararka Caalamka
+                    </h2>
+                    <a href="#" class="text-sm text-red-600 hover:underline">Arag Dhammaan <i class="fas fa-arrow-left mr-1"></i></a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <article class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg news-card group">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=600&h=400&fit=crop" alt="US Politics" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            <span class="absolute top-4 right-4 bg-red-600 text-white text-xs px-2 py-1 rounded">MUHIIM</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-red-600 transition">Maraykanka oo ku dhawaaqay siyaasad cusub oo diblumaasiyadeed</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">Madaxweynaha cusub ee Maraykanka ayaa soo saaray qorshayaal cusub oo ku saabsan xiriirka caalamiga ah...</p>
+                            <div class="flex justify-between items-center text-xs text-gray-500">
+                                <span><i class="far fa-clock ml-1"></i> 4 saacadood kahor</span>
+                                <span><i class="far fa-comment ml-1"></i> 24</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg news-card group">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1526666923127-b2970f64b422?w=600&h=400&fit=crop" alt="Europe News" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-red-600 transition">Yurub oo dhisaaya xeerar cusub oo ku saabsan amniga internetka</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">Barlamaanka Yurub ayaa codsiiyay in la adkeeyo ilaalinta xogta shaqsiyeed ee muwaadiniinta...</p>
+                            <div class="flex justify-between items-center text-xs text-gray-500">
+                                <span><i class="far fa-clock ml-1"></i> 6 saacadood kahor</span>
+                                <span><i class="far fa-comment ml-1"></i> 18</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg news-card group">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1569163139599-0f4517e36b51?w=600&h=400&fit=crop" alt="Asia News" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-red-600 transition">Shiinaha oo soo saaray teknolojiyad cusub oo dayax-gacmeed ah</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">Wasaaradda dayax-gacmeedka Shiinaha ayaa ku dhawaaqday guul weyn oo ku saabsan safarro cusub...</p>
+                            <div class="flex justify-between items-center text-xs text-gray-500">
+                                <span><i class="far fa-clock ml-1"></i> 8 saacadood kahor</span>
+                                <span><i class="far fa-comment ml-1"></i> 31</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Wararka Afrika -->
+            <section id="afrika" class="scroll-mt-24">
+                <div class="flex justify-between items-center mb-6 border-b-2 border-green-600 pb-2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-globe-africa ml-2 text-green-600"></i>
+                        Wararka Afrika
+                    </h2>
+                    <a href="#" class="text-sm text-green-600 hover:underline">Arag Dhammaan <i class="fas fa-arrow-left mr-1"></i></a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article class="flex gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md news-card">
+                        <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=300&h=200&fit=crop" alt="Nigeria" class="w-32 h-24 object-cover rounded-lg flex-shrink-0">
+                        <div>
+                            <span class="text-green-600 text-xs font-bold">NAYJEERIYA</span>
+                            <h3 class="font-bold mb-2 line-clamp-2 hover:text-green-600 cursor-pointer">Dowladda Nigeria oo la dagaallamaysa burcad-badeedka</h3>
+                            <p class="text-xs text-gray-500">2 saacadood kahor</p>
+                        </div>
+                    </article>
+                    <article class="flex gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md news-card">
+                        <img src="https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?w=300&h=200&fit=crop" alt="Kenya" class="w-32 h-24 object-cover rounded-lg flex-shrink-0">
+                        <div>
+                            <span class="text-green-600 text-xs font-bold">KENYA</span>
+                            <h3 class="font-bold mb-2 line-clamp-2 hover:text-green-600 cursor-pointer">Nairobi oo host-gareysaysa shirweynaha ganacsiga Afrika</h3>
+                            <p class="text-xs text-gray-500">5 saacadood kahor</p>
+                        </div>
+                    </article>
+                    <article class="flex gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md news-card">
+                        <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=300&h=200&fit=crop" alt="South Africa" class="w-32 h-24 object-cover rounded-lg flex-shrink-0">
+                        <div>
+                            <span class="text-green-600 text-xs font-bold">KONFUR AFRIKA</span>
+                            <h3 class="font-bold mb-2 line-clamp-2 hover:text-green-600 cursor-pointer">Cape Town oo noqotay magaalada ugu fiican dalxiiska 2025</h3>
+                            <p class="text-xs text-gray-500">7 saacadood kahor</p>
+                        </div>
+                    </article>
+                    <article class="flex gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md news-card">
+                        <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=300&h=200&fit=crop" alt="Ethiopia" class="w-32 h-24 object-cover rounded-lg flex-shrink-0">
+                        <div>
+                            <span class="text-green-600 text-xs font-bold">ITIOOBIYA</span>
+                            <h3 class="font-bold mb-2 line-clamp-2 hover:text-green-600 cursor-pointer">Itoobiya oo dhisaaysa waddooyin cusub oo isku xira gobollada</h3>
+                            <p class="text-xs text-gray-500">9 saacadood kahor</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Wararka Soomaaliya -->
+            <section id="soomaaliya" class="scroll-mt-24">
+                <div class="flex justify-between items-center mb-6 border-b-2 border-blue-600 pb-2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-flag ml-2 text-blue-600"></i>
+                        Wararka Soomaaliya
+                    </h2>
+                    <a href="#" class="text-sm text-blue-600 hover:underline">Arag Dhammaan <i class="fas fa-arrow-left mr-1"></i></a>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <div class="relative h-64 md:h-auto">
+                            <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&h=600&fit=crop" alt="Mogadishu" class="w-full h-full object-cover">
+                            <div class="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">MUHIIM</div>
+                        </div>
+                        <div class="p-6 md:p-8 flex flex-col justify-center">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Dowladda Soomaaliya oo ku dhawaaqay horumar muhiim ah oo dhanka amniga</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+                                Wasaaradda amniga Soomaaliya ayaa sheegtay inay guulo weyn ka gaartay dagaalka ka dhanka ah Al-Shabaab, iyadoo xoogagga dowladda ay xirayeen goobo muhiim ah oo ay ku lahaayeen maleeshiyaadka...
+                            </p>
+                            <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                                <span><i class="far fa-clock ml-1"></i> 1 saacadood kahor</span>
+                                <span><i class="far fa-user ml-1"></i> Cabdullaahi Cumar</span>
+                            </div>
+                            <button class="self-start bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">Akhri Wixii Faahfaahsan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
+                        <h4 class="font-bold mb-2 hover:text-blue-600 cursor-pointer">Golaha Wakiilada oo ansixiyay sharciga dhalinyarada</h4>
+                        <p class="text-xs text-gray-500 mt-2">3 saacadood kahor</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
+                        <h4 class="font-bold mb-2 hover:text-blue-600 cursor-pointer">Wasaaradda waxbarashada oo soo saartay imtixaannada dugsiyada sare</h4>
+                        <p class="text-xs text-gray-500 mt-2">5 saacadood kahor</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
+                        <h4 class="font-bold mb-2 hover:text-blue-600 cursor-pointer">Diyaarad cusub oo ku soo dhawaaday garoonka Aadan Cadde</h4>
+                        <p class="text-xs text-gray-500 mt-2">6 saacadood kahor</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ciyaaraha -->
+            <section id="ciyaaraha" class="scroll-mt-24">
+                <div class="flex justify-between items-center mb-6 border-b-2 border-purple-600 pb-2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-futbol ml-2 text-purple-600"></i>
+                        Ciyaaraha
+                    </h2>
+                    <a href="#" class="text-sm text-purple-600 hover:underline">Arag Dhammaan <i class="fas fa-arrow-left mr-1"></i></a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg news-card">
+                        <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&h=300&fit=crop" alt="Football" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <span class="text-xs text-purple-600 font-bold">KUBADDA CAGTA</span>
+                            <h3 class="font-bold text-sm mt-1 mb-2">Barcelona oo guulaysatay La Liga</h3>
+                            <div class="text-xs text-gray-500">2 saacadood kahor</div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg news-card">
+                        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=400&h=300&fit=crop" alt="Basketball" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <span class="text-xs text-purple-600 font-bold">KUBADDA KOOBAHA</span>
+                            <h3 class="font-bold text-sm mt-1 mb-2">NBA: Lakers oo guulaysatay Celtics</h3>
+                            <div class="text-xs text-gray-500">4 saacadood kahor</div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg news-card">
+                        <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=400&h=300&fit=crop" alt="Athletics" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <span class="text-xs text-purple-600 font-bold">ORODKA</span>
+                            <h3 class="font-bold text-sm mt-1 mb-2">Mo Farah oo ku dhawaaqay inuu joojiyo ciyaaraha</h3>
+                            <div class="text-xs text-gray-500">6 saacadood kahor</div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg news-card">
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop" alt="Boxing" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <span class="text-xs text-purple-600 font-bold">FEERKA</span>
+                            <h3 class="font-bold text-sm mt-1 mb-2">Dagaal weyn oo feerka oo dhawaan dhici doona</h3>
+                            <div class="text-xs text-gray-500">8 saacadood kahor</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Caafimaadka -->
+            <section id="caafimaad" class="scroll-mt-24">
+                <div class="flex justify-between items-center mb-6 border-b-2 border-teal-500 pb-2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-heartbeat ml-2 text-teal-500"></i>
+                        Caafimaadka
+                    </h2>
+                    <a href="#" class="text-sm text-teal-600 hover:underline">Arag Dhammaan <i class="fas fa-arrow-left mr-1"></i></a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <article class="bg-gradient-to-br from-teal-50 to-white dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-teal-100 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-apple-alt text-teal-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Cunto caafimaad leh oo kuu dhigma</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Soo koobid ku saabsan cuntada ugu fiican caafimaadka wadnaha iyo maskaxda...</p>
+                        <a href="#" class="text-teal-600 text-sm font-semibold hover:underline">Akhri Meesha Oo Dhan →</a>
+                    </article>
+                    <article class="bg-gradient-to-br from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-blue-100 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-running text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Jirka jimicsiga iyo faa'iidooyinkiisa</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Soo koobid ku saabsan sida uu u caawiyo jimicsigu caafimaadka qofka...</p>
+                        <a href="#" class="text-blue-600 text-sm font-semibold hover:underline">Akhri Meesha Oo Dhan →</a>
+                    </article>
+                    <article class="bg-gradient-to-br from-red-50 to-white dark:from-gray-800 dark:to-gray-900 p-6 rounded-2xl shadow-lg border border-red-100 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-virus-slash text-red-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Tallaabooyinka ka hortagga cudurrada</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Waxyaabaha aad u baahan tahay si aad u ilaaliso naftaada cudurrada kala duwan...</p>
+                        <a href="#" class="text-red-600 text-sm font-semibold hover:underline">Akhri Meesha Oo Dhan →</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Saynis & Teknoloji -->
+            <section id="saynis" class="scroll-mt-24">
+                <div class="flex justify-between items-center mb-6 border-b-2 border-indigo-600 pb-2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-microchip ml-2 text-indigo-600"></i>
+                        Saynis & Teknoloji
+                    </h2>
+                    <a href="#" class="text-sm text-indigo-600 hover:underline">Arag Dhammaan <i class="fas fa-arrow-left mr-1"></i></a>
+                </div>
+                <div class="bg-indigo-900 rounded-2xl overflow-hidden shadow-2xl text-white">
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <div class="p-8 flex flex-col justify-center">
+                            <span class="bg-indigo-500 w-fit px-3 py-1 rounded-full text-xs font-bold mb-4">AI & TEKNOLOJI</span>
+                            <h3 class="text-3xl font-bold mb-4">ChatGPT 5 oo la shaacinayo dhawaan</h3>
+                            <p class="text-indigo-200 mb-6">OpenAI ayaa ku dhawaaqay inay dhisayso nooc cusub oo awood u leh artificial intelligence oo si buuxda u bedeli doona sida aynu u isticmaalno kombiyuutarada...</p>
+                            <button class="bg-white text-indigo-900 px-6 py-3 rounded-full font-bold hover:bg-indigo-50 transition w-fit">Faahfaahin Dheeraad Ah</button>
+                        </div>
+                        <div class="relative h-64 md:h-auto">
+                            <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop" alt="AI Technology" class="w-full h-full object-cover opacity-80">
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex gap-4 items-center">
+                        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=150&h=150&fit=crop" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" alt="Space">
+                        <div>
+                            <h4 class="font-bold text-sm mb-1">NASA oo soo saartay sawirro cusub oo Meere</h4>
+                            <p class="text-xs text-gray-500">3 saacadood kahor</p>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex gap-4 items-center">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=150&h=150&fit=crop" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" alt="Phone">
+                        <div>
+                            <h4 class="font-bold text-sm mb-1">iPhone 16 Pro: Waxyaabaha cusub</h4>
+                            <p class="text-xs text-gray-500">5 saacadood kahor</p>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex gap-4 items-center">
+                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=150&h=150&fit=crop" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" alt="Quantum">
+                        <div>
+                            <h4 class="font-bold text-sm mb-1">Quantum Computing: Halka uu marayo</h4>
+                            <p class="text-xs text-gray-500">7 saacadood kahor</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cimilada -->
+            <section id="cimilada" class="scroll-mt-24">
+                <div class="flex justify-between items-center mb-6 border-b-2 border-orange-500 pb-2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fas fa-cloud-sun ml-2 text-orange-500"></i>
+                        Cimilada
+                    </h2>
+                    <a href="#" class="text-sm text-orange-600 hover:underline">Arag Dhammaan <i class="fas fa-arrow-left mr-1"></i></a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-gradient-to-b from-blue-400 to-blue-600 text-white p-6 rounded-2xl text-center shadow-lg">
+                        <h4 class="font-bold text-lg mb-2">Muqdisho</h4>
+                        <i class="fas fa-sun text-5xl my-4"></i>
+                        <div class="text-4xl font-bold mb-2">32°C</div>
+                        <p class="text-sm">Kulayl dhexdhexaad</p>
+                        <div class="mt-4 text-xs bg-white/20 rounded-full py-1 px-3 inline-block">Habeen: 24°C</div>
+                    </div>
+                    <div class="bg-gradient-to-b from-gray-400 to-gray-600 text-white p-6 rounded-2xl text-center shadow-lg">
+                        <h4 class="font-bold text-lg mb-2">Hargeysa</h4>
+                        <i class="fas fa-cloud-rain text-5xl my-4"></i>
+                        <div class="text-4xl font-bold mb-2">18°C</div>
+                        <p class="text-sm">Roob yar</p>
+                        <div class="mt-4 text-xs bg-white/20 rounded-full py-1 px-3 inline-block">Habeen: 12°C</div>
+                    </div>
+                    <div class="bg-gradient-to-b from-yellow-400 to-orange-500 text-white p-6 rounded-2xl text-center shadow-lg">
+                        <h4 class="font-bold text-lg mb-2">Kismaayo</h4>
+                        <i class="fas fa-sun text-5xl my-4"></i>
+                        <div class="text-4xl font-bold mb-2">34°C</div>
+                        <p class="text-sm">Kulayl daran</p>
+                        <div class="mt-4 text-xs bg-white/20 rounded-full py-1 px-3 inline-block">Habeen: 26°C</div>
+                    </div>
+                    <div class="bg-gradient-to-b from-teal-400 to-teal-600 text-white p-6 rounded-2xl text-center shadow-lg">
+                        <h4 class="font-bold text-lg mb-2">Garowe</h4>
+                        <i class="fas fa-cloud-sun text-5xl my-4"></i>
+                        <div class="text-4xl font-bold mb-2">28°C</div>
+                        <p class="text-sm">Qabow-qabow</p>
+                        <div class="mt-4 text-xs bg-white/20 rounded-full py-1 px-3 inline-block">Habeen: 20°C</div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="lg:col-span-1 space-y-8">
+            
+            <!-- Trending -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg sticky top-24">
+                <h3 class="text-xl font-bold mb-4 flex items-center text-gray-800 dark:text-white">
+                    <i class="fas fa-fire text-red-500 ml-2"></i>
+                    Ugu Caansan
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex gap-3 items-start group cursor-pointer">
+                        <span class="text-2xl font-bold text-gray-300 group-hover:text-red-500 transition">01</span>
+                        <div>
+                            <h4 class="font-semibold text-sm leading-tight group-hover:text-red-600 transition">Dowladda Soomaaliya oo ku dhawaaqday miisaaniyad cusub</h4>
+                            <p class="text-xs text-gray-500 mt-1">12K akhris</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start group cursor-pointer">
+                        <span class="text-2xl font-bold text-gray-300 group-hover:text-red-500 transition">02</span>
+                        <div>
+                            <h4 class="font-semibold text-sm leading-tight group-hover:text-red-600 transition">Barcelona oo guulaysatay koobka La Liga</h4>
+                            <p class="text-xs text-gray-500 mt-1">10.5K akhris</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start group cursor-pointer">
+                        <span class="text-2xl font-bold text-gray-300 group-hover:text-red-500 transition">03</span>
+                        <div>
+                            <h4 class="font-semibold text-sm leading-tight group-hover:text-red-600 transition">Cudur cusub oo ka dilaacaya gobolada dhexe</h4>
+                            <p class="text-xs text-gray-500 mt-1">9.2K akhris</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start group cursor-pointer">
+                        <span class="text-2xl font-bold text-gray-300 group-hover:text-red-500 transition">04</span>
+                        <div>
+                            <h4 class="font-semibold text-sm leading-tight group-hover:text-red-600 transition">Tiknoolajiyada AI oo beddelaya caafimaadka</h4>
+                            <p class="text-xs text-gray-500 mt-1">8.7K akhris</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start group cursor-pointer">
+                        <span class="text-2xl font-bold text-gray-300 group-hover:text-red-500 transition">05</span>
+                        <div>
+                            <h4 class="font-semibold text-sm leading-tight group-hover:text-red-600 transition">Roobabka xagaaga ee Soomaaliya</h4>
+                            <p class="text-xs text-gray-500 mt-1">7.3K akhris</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="bg-gradient-to-br from-red-600 to-red-700 rounded-2xl p-6 shadow-lg text-white">
+                <h3 class="text-xl font-bold mb-2">Hesho Warar Cusub</h3>
+                <p class="text-sm text-red-100 mb-4">Is diiwaan geli si aad u hesho wararka ugu dambeeya emailkaaga</p>
+                <form onsubmit="event.preventDefault(); alert('Mahadsanid! Waad is diiwaan gelisay.')" class="space-y-3">
+                    <input type="email" placeholder="Emailkaaga" required class="w-full px-4 py-2 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-white">
+                    <button type="submit" class="w-full bg-white text-red-600 font-bold py-2 rounded-lg hover:bg-gray-100 transition">Is Diiwaan Gelin</button>
+                </form>
+            </div>
+
+            <!-- Social Widget -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Nagu Raacsanow</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="#" class="flex items-center justify-center gap-2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </a>
+                    <a href="#" class="flex items-center justify-center gap-2 bg-sky-500 text-white py-2 rounded-lg hover:bg-sky-600 transition">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                    <a href="#" class="flex items-center justify-center gap-2 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">
+                        <i class="fab fa-youtube"></i> YouTube
+                    </a>
+                    <a href="#" class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-lg hover:opacity-90 transition">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Tilmaamayaal</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm hover:bg-red-100 dark:hover:bg-red-900 cursor-pointer transition">#Soomaaliya</span>
+                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm hover:bg-red-100 dark:hover:bg-red-900 cursor-pointer transition">#Ciyaaraha</span>
+                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm hover:bg-red-100 dark:hover:bg-red-900 cursor-pointer transition">#Caafimaad</span>
+                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm hover:bg-red-100 dark:hover:bg-red-900 cursor-pointer transition">#Teknoloji</span>
+                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm hover:bg-red-100 dark:hover:bg-red-900 cursor-pointer transition">#Cimilada</span>
+                    <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm hover:bg-red-100 dark:hover:bg-red-900 cursor-pointer transition">#Dhaqaalaha</span>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-gray-100 dark:bg-gray-800 py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-8 bg-gradient-to-br from-red-600 to-red-700 text-white">
+                        <h3 class="text-2xl font-bold mb-4">Nala Soo Xiriir</h3>
+                        <p class="mb-6 text-red-100">Haddii aad qabto su'aal amiin war cusub, fadlan nala soo xiriir.</p>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-map-marker-alt text-xl"></i>
+                                <span>Muqdisho, Soomaaliya</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-phone text-xl"></i>
+                                <span>+252 61 234 5678</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-envelope text-xl"></i>
+                                <span>info@warzone24news.so</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <form onsubmit="event.preventDefault(); alert('Fariintaada waa la diray! Mahadsanid.')" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Magacaaga</label>
+                                <input type="text" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:border-red-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Emailkaaga</label>
+                                <input type="email" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:border-red-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Fariintaada</label>
+                                <textarea rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:border-red-500" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-red-600 text-white font-bold py-2 rounded-lg hover:bg-red-700 transition">Dir Fariinta</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold mb-4">
+                        <span class="text-red-500">WARZONE</span><span class="text-blue-500">24</span>NEWS
+                    </h2>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Warzone24News waa xogmaal caalami ah oo bixiya wararka ugu dambeeya ee Soomaaliya, Afrika iyo Caalamka.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Qaybaha</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Wararka Caalamka</a></li>
+                        <li><a href="#" class="hover:text-white transition">Wararka Afrika</a></li>
+                        <li><a href="#" class="hover:text-white transition">Wararka Soomaaliya</a></li>
+                        <li><a href="#" class="hover:text-white transition">Ciyaaraha</a></li>
+                        <li><a href="#" class="hover:text-white transition">Caafimaadka</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Xiriirka</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Nagu Saabsan</a></li>
+                        <li><a href="#" class="hover:text-white transition">Nala Soo Xiriir</a></li>
+                        <li><a href="#" class="hover:text-white transition">Shaqaalaysiiso</a></li>
+                        <li><a href="#" class="hover:text-white transition">Shuruudaha Adeegga</a></li>
+                        <li><a href="#" class="hover:text-white transition">Qaanuunka Qarsoonida</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Raacsanow</h4>
+                    <div class="flex space-x-4 space-x-reverse">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-sky-500 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-6 text-center text-gray-500 text-sm">
+                <p>© 2025 Warzone24News. Dhamaan xuquuqaha way xifdiyan yihiin.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Date Display
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('so-SO', dateOptions);
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // Check for saved theme preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Hero Slider
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.style.opacity = i === index ? '1' : '0';
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('bg-white', i === index);
+                dot.classList.toggle('bg-white/50', i !== index);
+            });
+            currentSlide = index;
+        }
+
+        function changeSlide(direction) {
+            let newIndex = currentSlide + direction;
+            if (newIndex >= totalSlides) newIndex = 0;
+            if (newIndex < 0) newIndex = totalSlides - 1;
+            showSlide(newIndex);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        // Auto-advance slider
+        setInterval(() => changeSlide(1), 5000);
+
+        // Search Functions
+        function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                alert(`Raadintaada: "${query}" - Waxaan kuu soo gudbin doonaa natiijooyinka.`);
+            }
+        }
+
+        function performMobileSearch() {
+            const query = document.getElementById('mobileSearchInput').value;
+            if (query.trim()) {
+                alert(`Raadintaada: "${query}" - Waxaan kuu soo gudbin doonaa natiijooyinka.`);
+            }
+        }
+
+        // Enter key for search
+        document.getElementById('searchInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') performSearch();
+        });
+        document.getElementById('mobileSearchInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') performMobileSearch();
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
